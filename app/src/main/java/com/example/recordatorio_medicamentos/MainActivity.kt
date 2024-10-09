@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.recordatorio_medicamentos.ui.theme.Recordatorio_medicamentosTheme
+import com.example.recordatorio_medicamentos.ui.theme.screens.InicioSesionScreen
+import com.example.recordatorio_medicamentos.ui.theme.screens.PortadaScreen
 import com.example.recordatorio_medicamentos.ui.theme.screens.RecuperarCuentaScreen
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +21,33 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Recordatorio_medicamentosTheme {
+                // Estado para controlar la visibilidad de las pantallas
+                var isLoginScreenVisible by remember { mutableStateOf(false) }
+                var isRecoverPasswordScreenVisible by remember { mutableStateOf(false) }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Cambia la pantalla de saludo por la pantalla de recuperar cuenta
-                    RecuperarCuentaScreen(modifier = Modifier.padding(innerPadding))
+                    when {
+                        isRecoverPasswordScreenVisible -> {
+                            RecuperarCuentaScreen(modifier = Modifier.padding(innerPadding))
+                        }
+                        isLoginScreenVisible -> {
+                            InicioSesionScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                onRecoverPasswordClick = {
+                                    isRecoverPasswordScreenVisible = true // Muestra la pantalla de recuperación de cuenta
+                                    isLoginScreenVisible = false // Opcional: Oculta la pantalla de inicio de sesión
+                                }
+                            )
+                        }
+                        else -> {
+                            PortadaScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                onLoginClick = {
+                                    isLoginScreenVisible = true // Cambia el estado para mostrar la pantalla de inicio de sesión
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -30,8 +56,16 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRecuperarCuentaScreen() {
+fun PreviewPortadaScreen() {
     Recordatorio_medicamentosTheme {
-        RecuperarCuentaScreen() // Muestra una vista previa de la pantalla de recuperación
+        PortadaScreen(onLoginClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewInicioSesionScreen() {
+    Recordatorio_medicamentosTheme {
+        InicioSesionScreen(onRecoverPasswordClick = {})
     }
 }
