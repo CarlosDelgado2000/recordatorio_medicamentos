@@ -3,16 +3,24 @@ package com.example.recordatorio_medicamentos.ui.theme.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: () -> Unit, onBackClick: () -> Unit) {
+fun InicioSesionScreen(
+    modifier: Modifier = Modifier,
+    onRecoverPasswordClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onLoginClick: (String, String) -> Unit // Se pasa la función para el evento de login
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -24,9 +32,9 @@ fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: ()
         Button(
             onClick = onBackClick,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-            modifier = Modifier.align(Alignment.End) // Alinear a la derecha
+            modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Regresar", color = Color.White) // Texto en blanco
+            Text("Regresar", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -39,26 +47,56 @@ fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: ()
         Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = email,
+            onValueChange = {
+                email = it
+                showError = false
+            },
             label = { Text("Correo Electrónico") },
+            placeholder = { Text("Por favor ingrese su usuario o correo electrónico") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        if (showError && email.isEmpty()) {
+            Text(
+                text = "Este campo es obligatorio",
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = password,
+            onValueChange = {
+                password = it
+                showError = false
+            },
             label = { Text("Contraseña") },
+            placeholder = { Text("Por favor ingrese su contraseña") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        if (showError && password.isEmpty()) {
+            Text(
+                text = "Este campo es obligatorio",
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { /* Acción de inicio de sesión */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red), // Color del botón "Iniciar sesión"
+            onClick = {
+                if (email.isEmpty() || password.isEmpty()) {
+                    showError = true
+                } else {
+                    onLoginClick(email, password) // Llamada al callback de login
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar Sesión", color = Color.White)
@@ -79,10 +117,4 @@ fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: ()
             style = MaterialTheme.typography.bodyMedium
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewInicioSesionScreen() {
-    InicioSesionScreen(onRecoverPasswordClick = {}, onBackClick = {})
 }

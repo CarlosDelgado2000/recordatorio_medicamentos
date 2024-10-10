@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.recordatorio_medicamentos.ui.theme.Recordatorio_medicamentosTheme
 import com.example.recordatorio_medicamentos.ui.theme.screens.InicioSesionScreen
+import com.example.recordatorio_medicamentos.ui.theme.screens.MedicamentoScreen // Import the MedicamentoScreen
 import com.example.recordatorio_medicamentos.ui.theme.screens.RecuperarCuentaScreen
 import com.example.recordatorio_medicamentos.ui.theme.screens.RegistroScreen
 
@@ -25,7 +26,8 @@ class MainActivity : ComponentActivity() {
                 // Estado para controlar la visibilidad de las pantallas
                 var isLoginScreenVisible by remember { mutableStateOf(false) }
                 var isRecoverPasswordScreenVisible by remember { mutableStateOf(false) }
-                var isRegisterScreenVisible by remember { mutableStateOf(false) } // Estado para la pantalla de registro
+                var isRegisterScreenVisible by remember { mutableStateOf(false) }
+                var isMedicamentoScreenVisible by remember { mutableStateOf(false) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     when {
@@ -43,6 +45,24 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(innerPadding),
                                 onBackClick = {
                                     isRegisterScreenVisible = false // Volver a la pantalla anterior
+                                },
+                                onRegisterSuccess = {
+                                    isRegisterScreenVisible = false // Oculta la pantalla de registro
+                                    isLoginScreenVisible = true // Muestra la pantalla de inicio de sesión
+                                }
+                            )
+                        }
+                        isMedicamentoScreenVisible -> {
+                            MedicamentoScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                onLogoutClick = {
+                                    // Lógica para manejar el cierre de sesión
+                                    isMedicamentoScreenVisible = false // Oculta la pantalla de medicamentos
+                                    isLoginScreenVisible = true // Regresa a la pantalla de inicio de sesión
+                                },
+                                onViewAgendaClick = {
+                                    // Lógica para manejar la visualización de la agenda
+                                    // Implementa tu lógica aquí
                                 }
                             )
                         }
@@ -55,6 +75,15 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onBackClick = {
                                     isLoginScreenVisible = false // Volver a la pantalla anterior
+                                },
+                                onLoginClick = { email, password ->
+                                    // Aquí defines la lógica que quieres que suceda al hacer clic en "Iniciar Sesión"
+                                    // Puedes implementar la autenticación o cualquier otra lógica
+
+                                    // Suponiendo que la autenticación es exitosa:
+                                    isLoginScreenVisible = false // Oculta la pantalla de inicio de sesión
+                                    isMedicamentoScreenVisible = true // Muestra la pantalla de medicamentos
+                                    println("Iniciar sesión con correo: $email y contraseña: $password")
                                 }
                             )
                         }
@@ -88,6 +117,10 @@ fun PreviewPortadaScreen() {
 @Composable
 fun PreviewInicioSesionScreen() {
     Recordatorio_medicamentosTheme {
-        InicioSesionScreen(onRecoverPasswordClick = {}, onBackClick = {})
+        InicioSesionScreen(
+            onRecoverPasswordClick = {},
+            onBackClick = {},
+            onLoginClick = { _, _ -> }
+        )
     }
 }

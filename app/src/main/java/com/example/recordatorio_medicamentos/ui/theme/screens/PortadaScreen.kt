@@ -86,7 +86,7 @@ fun PortadaScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp) // Espacio horizontal en los bordes
         ) {
-            Text("Comenzar", color = Color.White)
+            Text("Registrar", color = Color.White)
         }
     }
 }

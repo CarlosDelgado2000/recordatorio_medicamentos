@@ -1,23 +1,35 @@
 package com.example.recordatorio_medicamentos.ViewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 
 class RegistroViewModel : ViewModel() {
+    var nombre by mutableStateOf("")
+    var correo by mutableStateOf("")
+    var contrasena by mutableStateOf("")
+    var numeroCelular by mutableStateOf("")
+    var errorMessage by mutableStateOf<String?>(null)
+    var successMessage by mutableStateOf<String?>(null)
 
-    // Variables para almacenar los datos de registro
-    var nombre: String = ""
-    var correo: String = ""
-    var contrasena: String = ""
-    var numeroCelular: String = ""
+    fun registrarUsuario(onSuccess: () -> Unit) {
+        // Resetea mensajes de error y éxito
+        errorMessage = null
+        successMessage = null
 
-    // Función para registrar un nuevo usuario
-    fun registrarUsuario() {
-        viewModelScope.launch {
-            // Aquí puedes añadir la lógica para registrar al usuario
-            // por ejemplo, llamar a una API o guardar en una base de datos local
-            // Asegúrate de manejar errores y mostrar mensajes adecuados
+        // Validación de campos
+        when {
+            nombre.isEmpty() -> errorMessage = "El nombre y apellido son obligatorios."
+            correo.isEmpty() -> errorMessage = "El correo es obligatorio."
+            contrasena.isEmpty() -> errorMessage = "La contraseña es obligatoria."
+            numeroCelular.isEmpty() -> errorMessage = "El número celular es obligatorio."
+            else -> {
+                // Lógica de registro aquí
+                // Si el registro es exitoso
+                successMessage = "Registro exitoso."
+                onSuccess()
+            }
         }
     }
 }
