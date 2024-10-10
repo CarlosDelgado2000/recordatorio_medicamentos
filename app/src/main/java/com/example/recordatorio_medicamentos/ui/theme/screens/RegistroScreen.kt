@@ -1,18 +1,15 @@
 package com.example.recordatorio_medicamentos.ui.theme.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: () -> Unit, onBackClick: () -> Unit) {
+fun RegistroScreen(modifier: Modifier = Modifier, onBackClick: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -30,18 +27,27 @@ fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: ()
         }
 
         Spacer(modifier = Modifier.height(32.dp))
-
         Text(
-            text = "Login",
-            style = MaterialTheme.typography.headlineMedium
+            text = "Registro",
+            style = MaterialTheme.typography.headlineLarge
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Campos de entrada para el registro
         OutlinedTextField(
             value = "",
             onValueChange = {},
-            label = { Text("Correo Electrónico") },
+            label = { Text("Nombre y Apellido") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text("Correo") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -54,35 +60,24 @@ fun InicioSesionScreen(modifier: Modifier = Modifier, onRecoverPasswordClick: ()
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text("Número celular") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { /* Acción de inicio de sesión */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red), // Color del botón "Iniciar sesión"
+            onClick = { /* Manejar el registro */ },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Iniciar Sesión", color = Color.White)
+            Text("Registrar")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Texto para recuperar contraseña
-        Text(
-            text = buildAnnotatedString {
-                append("¿Olvidaste tu contraseña? ")
-                pushStyle(MaterialTheme.typography.bodyMedium.toSpanStyle().copy(color = Color.Blue))
-                append("Recuperar")
-                pop()
-            },
-            modifier = Modifier.clickable(onClick = onRecoverPasswordClick),
-            color = Color.Gray,
-            style = MaterialTheme.typography.bodyMedium
-        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewInicioSesionScreen() {
-    InicioSesionScreen(onRecoverPasswordClick = {}, onBackClick = {})
 }
